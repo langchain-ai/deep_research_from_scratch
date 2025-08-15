@@ -16,15 +16,18 @@ from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, AIMessage, get_buffer_string
 from langgraph.graph import StateGraph, START, END
 from langgraph.types import Command
+import platform
 
 from deep_research_from_scratch.prompts import clarify_with_user_instructions, transform_messages_into_research_topic_prompt
 from deep_research_from_scratch.state_scope import AgentState, ClarifyWithUser, ResearchQuestion, AgentInputState
 
 # ===== UTILITY FUNCTIONS =====
 
+
 def get_today_str() -> str:
-    """Get current date in a human-readable format."""
-    return datetime.now().strftime("%a %b %-d, %Y")
+    day_format = "%-d" if platform.system() != "Windows" else "%#d"
+    return datetime.now().strftime(f"%a %b {day_format}, %Y")
+
 
 # ===== CONFIGURATION =====
 
