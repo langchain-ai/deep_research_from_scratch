@@ -17,12 +17,14 @@ from tavily import TavilyClient
 
 from deep_research_from_scratch.state_research import Summary
 from deep_research_from_scratch.prompts import summarize_webpage_prompt
+import platform
 
 # ===== UTILITY FUNCTIONS =====
 
 def get_today_str() -> str:
     """Get current date in a human-readable format."""
-    return datetime.now().strftime("%a %b %-d, %Y")
+    day_format = "%-d" if platform.system() != "Windows" else "%#d"
+    return datetime.now().strftime(f"%a %b {day_format}, %Y")
 
 def get_current_dir() -> Path:
     """Get the current directory of the module.
