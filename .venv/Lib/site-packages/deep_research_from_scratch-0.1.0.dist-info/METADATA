@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: deep_research_from_scratch
+Version: 0.1.0
+Summary: Build a deep research agent from scratch
+Requires-Python: >=3.11
+Requires-Dist: langgraph>=0.5.4
+Requires-Dist: langchain>=0.3.0
+Requires-Dist: langchain-openai>=0.2.0
+Requires-Dist: langchain-anthropic>=0.3.0
+Requires-Dist: langchain_community>=0.3.27
+Requires-Dist: langchain_tavily>=0.2.7
+Requires-Dist: langchain_mcp_adapters>=0.1.9
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: rich>=14.0.0
+Requires-Dist: jupyter>=1.0.0
+Requires-Dist: ipykernel>=6.20.0
+Requires-Dist: tavily-python>=0.5.0
+Provides-Extra: dev
+Requires-Dist: mypy>=1.11.1; extra == "dev"
+Requires-Dist: ruff>=0.6.1; extra == "dev"
