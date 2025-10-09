@@ -38,8 +38,8 @@ export PATH="/Users/$USER/.local/bin:$PATH"
 
 - Install necessary packages.
 ```bash
-pip install langgraph langchain_core langchain langchain-openai \
-        langchain-anthropic langchain_mcp_adapters tavily-python
+pip install langgraph langchain_core langchain langchain-openai
+pip install langchain-anthropic langchain_mcp_adapters mcp tavily-python
 pip install --upgrade jupyterlab ipywidgets
 
 ```
