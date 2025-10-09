@@ -1,10 +1,10 @@
-# 🧱 Deep Research From Scratch 
+# 🧱 Deep Research From Scratch
 
 Deep research has broken out as one of the most popular agent applications. [OpenAI](https://openai.com/index/introducing-deep-research/), [Anthropic](https://www.anthropic.com/engineering/built-multi-agent-research-system), [Perplexity](https://www.perplexity.ai/hub/blog/introducing-perplexity-deep-research), and [Google](https://gemini.google/overview/deep-research/?hl=en) all have deep research products that produce comprehensive reports using [various sources](https://www.anthropic.com/news/research) of context. There are also many [open](https://huggingface.co/blog/open-deep-research) [source](https://github.com/google-gemini/gemini-fullstack-langgraph-quickstart) implementations. We built an [open deep researcher](https://github.com/langchain-ai/open_deep_research) that is simple and configurable, allowing users to bring their own models, search tools, and MCP servers. In this repo, we'll build a deep researcher from scratch! Here is a map of the major pieces that we will build:
 
 ![overview](https://github.com/user-attachments/assets/b71727bd-0094-40c4-af5e-87cdb02123b4)
 
-## 🚀 Quickstart 
+## 🚀 Quickstart
 
 ### Prerequisites
 
@@ -34,6 +34,16 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Update PATH to use the new uv version
 export PATH="/Users/$USER/.local/bin:$PATH"
 ```
+
+
+- Install necessary packages.
+```bash
+pip install langgraph langchain_core langchain langchain-openai \
+        langchain-anthropic langchain_mcp_adapters tavily-python
+pip install --upgrade jupyterlab ipywidgets
+
+```
+
 
 ### Installation
 
@@ -79,9 +89,9 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 jupyter notebook
 ```
 
-## Background 
+## Background
 
-Research is an open‑ended task; the best strategy to answer a user request can’t be easily known in advance. Requests can require different research strategies and varying levels of search depth. Consider this request. 
+Research is an open‑ended task; the best strategy to answer a user request can’t be easily known in advance. Requests can require different research strategies and varying levels of search depth. Consider this request.
 
 [Agents](https://langchain-ai.github.io/langgraph/tutorials/workflows/#agent) are well suited to research because they can flexibly apply different strategies, using intermediate results to guide their exploration. Open deep research uses an agent to conduct research as part of a three step process:
 
@@ -89,7 +99,7 @@ Research is an open‑ended task; the best strategy to answer a user request can
 2. **Research** – perform research
 3. **Write** – produce the final report
 
-## 📝 Organization 
+## 📝 Organization
 
 This repo contains 5 tutorial notebooks that build a deep research system from scratch:
 
@@ -201,4 +211,4 @@ This repo contains 5 tutorial notebooks that build a deep research system from s
 - **State Management**: Complex state flows across subgraphs and nodes
 - **Protocol Integration**: MCP servers and tool ecosystems
 
-Each notebook builds on the previous concepts, culminating in a production-ready deep research system that can handle complex, multi-faceted research queries with intelligent scoping and coordinated execution. 
+Each notebook builds on the previous concepts, culminating in a production-ready deep research system that can handle complex, multi-faceted research queries with intelligent scoping and coordinated execution.
