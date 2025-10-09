@@ -22,7 +22,7 @@ class AgentInputState(MessagesState):
 class AgentState(MessagesState):
     """
     Main state for the full multi-agent research system.
-
+    
     Extends MessagesState with additional fields for research coordination.
     Note: Some fields are duplicated across different state classes for proper
     state management between subgraphs and the main workflow.
@@ -43,7 +43,7 @@ class AgentState(MessagesState):
 
 class ClarifyWithUser(BaseModel):
     """Schema for user clarification decision and questions."""
-
+    
     need_clarification: bool = Field(
         description="Whether the user needs to be asked a clarifying question.",
     )
@@ -56,7 +56,7 @@ class ClarifyWithUser(BaseModel):
 
 class ResearchQuestion(BaseModel):
     """Schema for structured research brief generation."""
-
+    
     research_brief: str = Field(
         description="A research question that will be used to guide the research.",
     )

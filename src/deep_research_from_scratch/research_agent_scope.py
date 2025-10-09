@@ -8,6 +8,8 @@ This module implements the scoping phase of the research workflow, where we:
 The workflow uses structured output to make deterministic decisions about
 whether sufficient context exists to proceed with research.
 """
+import os
+from langchain_openai import AzureChatOpenAI
 
 from datetime import datetime
 from typing_extensions import Literal
@@ -29,14 +31,21 @@ def get_today_str() -> str:
 # ===== CONFIGURATION =====
 
 # Initialize model
-model = init_chat_model(model="openai:gpt-4.1", temperature=0.0)
+# model = init_chat_model(model="openai:gpt-4.1", temperature=0.0)	
+model = AzureChatOpenAI(
+    deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4.1-20250414"),
+    azure_endpoint="https://llm-proxy.perflab.nvidia.com",
+    api_key=os.getenv("PERFLAB_ONEAPI"),
+    api_version="2025-02-01-preview",
+    temperature=0.0
+)
 
 # ===== WORKFLOW NODES =====
 
 def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brief", "__end__"]]:
     """
     Determine if the user's request contains sufficient information to proceed with research.
-
+    
     Uses structured output to make deterministic decisions and avoid hallucination.
     Routes to either research brief generation or ends with a clarification question.
     """
@@ -50,7 +59,7 @@ def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brie
             date=get_today_str()
         ))
     ])
-
+    
     # Route based on clarification need
     if response.need_clarification:
         return Command(
@@ -66,13 +75,13 @@ def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brie
 def write_research_brief(state: AgentState):
     """
     Transform the conversation history into a comprehensive research brief.
-
+    
     Uses structured output to ensure the brief follows the required format
     and contains all necessary details for effective research.
     """
     # Set up structured output model
     structured_output_model = model.with_structured_output(ResearchQuestion)
-
+    
     # Generate research brief from conversation history
     response = structured_output_model.invoke([
         HumanMessage(content=transform_messages_into_research_topic_prompt.format(
@@ -80,7 +89,7 @@ def write_research_brief(state: AgentState):
             date=get_today_str()
         ))
     ])
-
+    
     # Update state with generated research brief and pass it to the supervisor
     return {
         "research_brief": response.research_brief,
