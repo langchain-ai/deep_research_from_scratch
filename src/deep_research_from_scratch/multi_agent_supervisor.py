@@ -10,11 +10,12 @@ The supervisor uses parallel research execution to improve efficiency while
 maintaining isolated context windows for each research topic.
 """
 
-import asyncio
+import os, asyncio
 
 from typing_extensions import Literal
 
 from langchain.chat_models import init_chat_model
+from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import (
     HumanMessage, 
     BaseMessage, 
@@ -36,16 +37,16 @@ from deep_research_from_scratch.utils import get_today_str, think_tool
 
 def get_notes_from_tool_calls(messages: list[BaseMessage]) -> list[str]:
     """Extract research notes from ToolMessage objects in supervisor message history.
-
+    
     This function retrieves the compressed research findings that sub-agents
     return as ToolMessage content. When the supervisor delegates research to
     sub-agents via ConductResearch tool calls, each sub-agent returns its
     compressed findings as the content of a ToolMessage. This function
     extracts all such ToolMessage content to compile the final research notes.
-
+    
     Args:
         messages: List of messages from supervisor's conversation history
-
+        
     Returns:
         List of research note strings extracted from ToolMessage objects
     """
@@ -68,7 +69,13 @@ except ImportError:
 # ===== CONFIGURATION =====
 
 supervisor_tools = [ConductResearch, ResearchComplete, think_tool]
-supervisor_model = init_chat_model(model="anthropic:claude-sonnet-4-20250514")
+# supervisor_model = init_chat_model(model="anthropic:claude-sonnet-4-20250514")
+model_args = dict(azure_endpoint="https://llm-proxy.perflab.nvidia.com",
+    api_key=os.getenv("PERFLAB_ONEAPI"),
+    api_version="2025-02-01-preview",)
+supervisor_model = AzureChatOpenAI(
+    deployment_name=os.getenv("RESEARCH_MODEL", "claude-sonnet-4-20250514"),
+    temperature=0.0, **model_args)
 supervisor_model_with_tools = supervisor_model.bind_tools(supervisor_tools)
 
 # System constants
@@ -84,20 +91,20 @@ max_concurrent_researchers = 3
 
 async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tools"]]:
     """Coordinate research activities.
-
+    
     Analyzes the research brief and current progress to decide:
     - What research topics need investigation
     - Whether to conduct parallel research
     - When research is complete
-
+    
     Args:
         state: Current supervisor state with messages and research progress
-
+        
     Returns:
         Command to proceed to supervisor_tools node with updated state
     """
     supervisor_messages = state.get("supervisor_messages", [])
-
+    
     # Prepare system message with current date and constraints
     system_message = lead_researcher_prompt.format(
         date=get_today_str(), 
@@ -105,10 +112,10 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
         max_researcher_iterations=max_researcher_iterations
     )
     messages = [SystemMessage(content=system_message)] + supervisor_messages
-
+    
     # Make decision about next research steps
     response = await supervisor_model_with_tools.ainvoke(messages)
-
+    
     return Command(
         goto="supervisor_tools",
         update={
@@ -119,29 +126,29 @@ async def supervisor(state: SupervisorState) -> Command[Literal["supervisor_tool
 
 async def supervisor_tools(state: SupervisorState) -> Command[Literal["supervisor", "__end__"]]:
     """Execute supervisor decisions - either conduct research or end the process.
-
+    
     Handles:
     - Executing think_tool calls for strategic reflection
     - Launching parallel research agents for different topics
     - Aggregating research results
     - Determining when research is complete
-
+    
     Args:
         state: Current supervisor state with messages and iteration count
-
+        
     Returns:
         Command to continue supervision, end process, or handle errors
     """
     supervisor_messages = state.get("supervisor_messages", [])
     research_iterations = state.get("research_iterations", 0)
     most_recent_message = supervisor_messages[-1]
-
+    
     # Initialize variables for single return pattern
     tool_messages = []
     all_raw_notes = []
     next_step = "supervisor"  # Default next step
     should_end = False
-
+    
     # Check exit criteria first
     exceeded_iterations = research_iterations >= max_researcher_iterations
     no_tool_calls = not most_recent_message.tool_calls
@@ -149,11 +156,11 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
         tool_call["name"] == "ResearchComplete" 
         for tool_call in most_recent_message.tool_calls
     )
-
+    
     if exceeded_iterations or no_tool_calls or research_complete:
         should_end = True
         next_step = END
-
+    
     else:
         # Execute ALL tool calls before deciding next step
         try:
@@ -162,7 +169,7 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
                 tool_call for tool_call in most_recent_message.tool_calls 
                 if tool_call["name"] == "think_tool"
             ]
-
+            
             conduct_research_calls = [
                 tool_call for tool_call in most_recent_message.tool_calls 
                 if tool_call["name"] == "ConductResearch"
@@ -206,7 +213,7 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
                         tool_call_id=tool_call["id"]
                     ) for result, tool_call in zip(tool_results, conduct_research_calls)
                 ]
-
+                
                 tool_messages.extend(research_tool_messages)
 
                 # Aggregate raw notes from all research
@@ -214,12 +221,12 @@ async def supervisor_tools(state: SupervisorState) -> Command[Literal["superviso
                     "\n".join(result.get("raw_notes", [])) 
                     for result in tool_results
                 ]
-
+                
         except Exception as e:
             print(f"Error in supervisor tools: {e}")
             should_end = True
             next_step = END
-
+    
     # Single return point with appropriate state updates
     if should_end:
         return Command(
