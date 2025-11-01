@@ -17,7 +17,7 @@ from langgraph.graph.message import add_messages
 class ResearcherState(TypedDict):
     """
     State for the research agent containing message history and research metadata.
-
+    
     This state tracks the researcher's conversation, iteration count for limiting
     tool calls, the research topic being investigated, compressed findings,
     and raw research notes for detailed analysis.
@@ -31,7 +31,7 @@ class ResearcherState(TypedDict):
 class ResearcherOutputState(TypedDict):
     """
     Output state for the research agent containing final research results.
-
+    
     This represents the final output of the research process with compressed
     research findings and all raw notes from the research process.
     """

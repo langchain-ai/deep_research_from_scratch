@@ -19,6 +19,7 @@ import os
 from typing_extensions import Literal
 
 from langchain.chat_models import init_chat_model
+from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage, filter_messages
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.graph import StateGraph, START, END
@@ -53,8 +54,17 @@ def get_mcp_client():
     return _client
 
 # Initialize models
-compress_model = init_chat_model(model="openai:gpt-4.1", max_tokens=32000)
-model = init_chat_model(model="anthropic:claude-sonnet-4-20250514")
+# compress_model = init_chat_model(model="openai:gpt-4.1", max_tokens=32000)
+# model = init_chat_model(model="anthropic:claude-sonnet-4-20250514")
+model_args = dict(azure_endpoint="https://llm-proxy.perflab.nvidia.com",
+    api_key=os.getenv("PERFLAB_ONEAPI"),
+    api_version="2025-02-01-preview",)
+model = AzureChatOpenAI(
+    deployment_name=os.getenv("RESEARCH_MODEL", "claude-sonnet-4-20250514"),
+    temperature=0.0, **model_args)
+compress_model = AzureChatOpenAI(
+    deployment_name=os.getenv("COMPRESS_MODEL", "gpt-4.1-20250414"),
+    temperature=0.0, max_tokens=32000, **model_args)
 
 # ===== AGENT NODES =====
 
@@ -145,7 +155,7 @@ def compress_research(state: ResearcherState) -> dict:
     This function filters out think_tool calls and focuses on substantive
     file-based research content from MCP tools.
     """
-
+    
     system_message = compress_research_system_prompt.format(date=get_today_str())
     messages = [SystemMessage(content=system_message)] + state.get("researcher_messages", []) + [HumanMessage(content=compress_research_human_message)]
 
