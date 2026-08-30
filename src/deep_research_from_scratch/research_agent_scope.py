@@ -24,12 +24,12 @@ from deep_research_from_scratch.state_scope import AgentState, ClarifyWithUser, 
 
 def get_today_str() -> str:
     """Get current date in a human-readable format."""
-    return datetime.now().strftime("%a %b %-d, %Y")
+    return datetime.now().strftime("%a %b %#d, %Y")
 
 # ===== CONFIGURATION =====
 
 # Initialize model
-model = init_chat_model(model="openai:gpt-4.1", temperature=0.0)
+model = init_chat_model(model="google_genai:gemini-3.6-flash", temperature=0.0)
 
 # ===== WORKFLOW NODES =====
 
