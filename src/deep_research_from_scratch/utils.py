@@ -22,7 +22,7 @@ from deep_research_from_scratch.prompts import summarize_webpage_prompt
 
 def get_today_str() -> str:
     """Get current date in a human-readable format."""
-    return datetime.now().strftime("%a %b %-d, %Y")
+    return datetime.now().strftime("%a %b %#d, %Y")
 
 def get_current_dir() -> Path:
     """Get the current directory of the module.
@@ -39,7 +39,7 @@ def get_current_dir() -> Path:
 
 # ===== CONFIGURATION =====
 
-summarization_model = init_chat_model(model="openai:gpt-4.1-mini")
+summarization_model = init_chat_model(model="google_genai:gemini-3.6-flash")
 tavily_client = TavilyClient()
 
 # ===== SEARCH FUNCTIONS =====
