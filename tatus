@@ -1,0 +1,66 @@
+* [33m0b6c4db[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mGenai[m[33m, [m[1;31morigin/Genai[m[33m, [m[1;32mmain[m[33m)[m Changes to try another model; genai
+* [33m93f35e5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Migrate expiring LangSmith traces to fresh long-lived copies
+* [33mb58bf73[m Add MIT LICENSE
+*   [33mb59a105[m Merge pull request #10 from dave2492/migrate-sonnet
+[32m|[m[33m\[m  
+[32m|[m * [33mf3d1a59[m Migrate sonnet-4 to sonnet-4-6
+[32m|[m[32m/[m  
+* [33mf7325d5[m Update pyproject.toml
+*   [33m9efefb9[m Merge pull request #4 from langchain-ai/add-claude-github-actions-1755545981405
+[34m|[m[35m\[m  
+[34m|[m * [33m850d2cc[m[33m ([m[1;31morigin/add-claude-github-actions-1755545981405[m[33m)[m "Claude Code Review workflow"
+[34m|[m * [33mce58870[m "Claude PR Assistant workflow"
+[34m|[m[34m/[m  
+* [33m4aca8e6[m Update
+* [33m13d5fc5[m fmt, address minor feedback
+* [33m59a436a[m Further edits
+* [33m2ecd879[m Minor fix
+* [33mf5b9ccd[m Address feedback, regenerate all ntbks
+* [33me478566[m Address further feedback
+* [33m7aeca8a[m Address feedback on ntbk 1
+* [33mfb3c879[m Address feedback on ntbk 1
+* [33m5bd76e5[m Update
+* [33mc08a013[m ruff
+* [33m0890276[m Update
+* [33m3686e61[m Update
+* [33m9f89663[m Update
+* [33mf519618[m Update MCP
+* [33m50222d0[m Update MCP
+* [33mecf0ead[m Prompt eng
+* [33mcaa0009[m Update
+* [33md95fa5e[m Update
+* [33m1564238[m Updates
+* [33mbb3d1d3[m Update
+[35m|[m * [33meb3bcfe[m[33m ([m[1;31morigin/gbl_exercises[m[33m)[m updates to support files in new excercises location
+[35m|[m * [33mfd086a3[m early versions of exercises
+[35m|[m * [33me7ee0a9[m treat notebooks as binary during merge and diff
+[35m|[m[35m/[m  
+* [33m1a1eea2[m Add Evals Image
+* [33m5895ccf[m Update
+* [33mb3cc12b[m Update
+* [33mb0433c4[m Update
+*   [33mdc6d940[m Merge pull request #2 from langchain-ai/nh/add-evals
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33mef1957b[m[33m ([m[1;31morigin/nh/add-evals[m[33m)[m Update notebook 4
+[1;31m|[m * [33m7a376fb[m Add commentary
+[1;31m|[m * [33m66d16d0[m Update notebook 2
+[1;31m|[m * [33m376dcf2[m restore state
+[1;31m|[m * [33m9e4621d[m Add evals for Notebook 1
+[1;31m|[m[1;31m/[m  
+* [33m11cb949[m Update
+*   [33m5f18844[m Merge pull request #1 from langchain-ai/rlm/try-edges
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33m2ebb457[m[33m ([m[1;31morigin/rlm/try-edges[m[33m)[m Update
+[1;33m|[m * [33mf326284[m add edges
+[1;33m|[m[1;33m/[m  
+* [33mdbf5426[m Update
+* [33m5c12fe4[m Update
+* [33m79c9ff6[m Update
+* [33m606b834[m Update
+*   [33m95c8189[m Merge branch 'main' of https://github.com/langchain-ai/deep_research_from_scratch
+[1;35m|[m[1;36m\[m  
+[1;35m|[m * [33mafb6d99[m Update README.md
+[1;35m|[m * [33meee1c4b[m Update README.md
+* [1;36m|[m [33m32fb9dc[m Update
+[1;36m|[m[1;36m/[m  
+* [33mace6e0b[m Update
